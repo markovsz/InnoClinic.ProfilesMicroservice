@@ -15,7 +15,7 @@ namespace Infrastructure.Repositories
 
         public void DeletePatient(Patient patient) => Delete(patient);
 
-        public async Task<Patient> GetPatientByIdAsync(int patientId) =>
+        public async Task<Patient> GetPatientByIdAsync(Guid patientId) =>
             await GetByCondition(e => e.Id.Equals(patientId))
             .FirstOrDefaultAsync();
 
