@@ -3,6 +3,7 @@ using Api.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.ConfigureDb(builder.Configuration);
+builder.Services.ConfigureRepositoryManager();
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
