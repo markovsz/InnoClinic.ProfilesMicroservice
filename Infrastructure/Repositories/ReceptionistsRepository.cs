@@ -15,8 +15,8 @@ namespace Infrastructure.Repositories
 
         public void DeleteReceptionist(Receptionist receptionist) => Delete(receptionist);
 
-        public async Task<Receptionist> GetReceptionistByIdAsync(Guid receptionistId) =>
-            await GetByCondition(e => e.Id.Equals(receptionistId))
+        public async Task<Receptionist> GetReceptionistByIdAsync(Guid receptionistId, bool trackChanges) =>
+            await GetByCondition(e => e.Id.Equals(receptionistId), trackChanges)
             .FirstOrDefaultAsync();
 
         public async Task<IEnumerable<Receptionist>> GetReceptionistsAsync() =>
