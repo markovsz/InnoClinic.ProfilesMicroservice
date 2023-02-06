@@ -5,7 +5,7 @@ namespace Domain.Interfaces
     public interface IDoctorsRepository
     {
         Task CreateDoctorAsync(Doctor doctor);
-        Task<Doctor> GetDoctorByIdAsync(int doctorId);
+        Task<Doctor> GetDoctorByIdAsync(Guid doctorId);
         Task<IEnumerable<Doctor>> GetDoctorsAsync();
         void UpdateDoctor(Doctor doctor);
         void DeleteDoctor(Doctor doctor);
