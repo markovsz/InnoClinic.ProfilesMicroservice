@@ -7,5 +7,6 @@ namespace Domain
         IDoctorsRepository Doctors { get; }
         IPatientsRepository Patients { get; }
         IReceptionistsRepository Receptionists { get; }
+        Task SaveChangesAsync();
     }
 }

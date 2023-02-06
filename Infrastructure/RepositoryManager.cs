@@ -44,5 +44,7 @@ namespace Infrastructure
                 return _receptionistsRepository;
             }
         }
+
+        public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
     }
 }
