@@ -1,4 +1,5 @@
-﻿using Infrastructure;
+﻿using Domain;
+using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -10,6 +11,11 @@ namespace Api.Extensions
         {
             services.AddDbContext<RepositoryContext>(opts => opts.UseSqlServer(configuration.GetConnectionString("dbConnection"),
                 b => b.MigrationsAssembly("Infrastructure")));
+        }
+        
+        public static void ConfigureRepositoryManager(this IServiceCollection services)
+        {
+            services.AddScoped<IRepositoryManager, RepositoryManager>();
         }
     }
 }
