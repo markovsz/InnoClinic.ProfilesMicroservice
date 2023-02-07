@@ -2,16 +2,17 @@
 using Application.DTOs.Outgoing;
 using Application.Interfaces;
 using AutoMapper;
+using Domain;
 using Domain.Entities;
 
 namespace Infrastructure.Services
 {
     public class DoctorsService : IDoctorsService
     {
-        private RepositoryManager _repositoryManager;
+        private IRepositoryManager _repositoryManager;
         private IMapper _mapper;
 
-        public DoctorsService(RepositoryManager repositoryManager, IMapper mapper) { 
+        public DoctorsService(IRepositoryManager repositoryManager, IMapper mapper) { 
             _repositoryManager = repositoryManager;
             _mapper = mapper;
         }

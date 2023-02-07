@@ -2,6 +2,7 @@
 using Application.DTOs.Outgoing;
 using Application.Interfaces;
 using AutoMapper;
+using Domain;
 using Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,10 @@ namespace Infrastructure.Services
 {
     public class ReceptionistsService : IReceptionistsService
     {
-        private RepositoryManager _repositoryManager;
+        private IRepositoryManager _repositoryManager;
         private IMapper _mapper;
 
-        public ReceptionistsService(RepositoryManager repositoryManager, IMapper mapper)
+        public ReceptionistsService(IRepositoryManager repositoryManager, IMapper mapper)
         {
             _repositoryManager = repositoryManager;
             _mapper = mapper;
