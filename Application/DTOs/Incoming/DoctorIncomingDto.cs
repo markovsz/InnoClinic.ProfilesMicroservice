@@ -12,6 +12,6 @@ namespace Application.DTOs.Incoming
         public Guid SpectializationId { get; set; }
         public Guid OfficeId { get; set; }
         public int CareerStartYear { get; set; }
-        public DoctorStatuses Status { get; set; }
+        public string Status { get; set; }
     }
 }
