@@ -48,5 +48,12 @@ namespace Api.Controllers
             await _doctorsService.DeleteDoctorByIdAsync(doctorId);
             return NoContent();
         }
+
+        [HttpPut("doctor/{doctorId}/status")]
+        public async Task<IActionResult> ChangeDoctorStatusAsync(Guid doctorId, [FromBody] string statusName)
+        {
+            await _doctorsService.ChangeDoctorStatusAsync(doctorId, statusName);
+            return NoContent();
+        }
     }
 }

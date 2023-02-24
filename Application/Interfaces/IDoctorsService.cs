@@ -10,5 +10,6 @@ namespace Application.Interfaces
         public Task<IEnumerable<DoctorOutgoingDto>> GetDoctorsAsync();
         public Task UpdateDoctorAsync(Guid doctorId, DoctorIncomingDto incomingDto);
         public Task DeleteDoctorByIdAsync(Guid doctorId);
+        public Task ChangeDoctorStatusAsync(Guid doctorId, string doctorStatus);
     }
 }

@@ -4,6 +4,7 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using Domain.Entities;
+using Infrastructure.Extensions;
 
 namespace Infrastructure.Services
 {
@@ -15,6 +16,14 @@ namespace Infrastructure.Services
         public DoctorsService(IRepositoryManager repositoryManager, IMapper mapper) { 
             _repositoryManager = repositoryManager;
             _mapper = mapper;
+        }
+
+        public async Task ChangeDoctorStatusAsync(Guid doctorId, string doctorStatus)
+        {
+            var status = doctorStatus.FromStringToDoctorStatusesEnum();
+            var doctor = await _repositoryManager.Doctors.GetDoctorByIdAsync(doctorId, true);
+            doctor.Status = status;
+            await _repositoryManager.SaveChangesAsync();
         }
 
         public async Task<Guid> CreateDoctorAsync(DoctorIncomingDto incomingDto)
