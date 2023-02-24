@@ -8,6 +8,6 @@
         public string MiddleName { get; set; }
         public bool IsLinkedToAccount { get; set; }
         public DateTime BirthDate { get; set; }
-        public Guid AccountId { get; set; }
+        public string AccountId { get; set; }
     }
 }
