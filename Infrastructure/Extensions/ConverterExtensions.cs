@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Extensions
 {
-    public static class ConvertersExtension
+    public static class ConverterExtensions
     {
         public static DoctorStatuses FromStringToDoctorStatusesEnum(this string enumValStr)
         {
