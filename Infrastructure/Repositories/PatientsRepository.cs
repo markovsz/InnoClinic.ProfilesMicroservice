@@ -18,6 +18,10 @@ namespace Infrastructure.Repositories
         public async Task<Patient> GetPatientByIdAsync(Guid patientId, bool trackChanges) =>
             await GetByCondition(e => e.Id.Equals(patientId), trackChanges)
             .FirstOrDefaultAsync();
+        
+        public async Task<Patient> GetPatientByAccountIdAsync(string accountId, bool trackChanges) =>
+            await GetByCondition(e => e.AccountId.Equals(accountId), trackChanges)
+            .FirstOrDefaultAsync();
 
         public async Task<IEnumerable<Patient>> GetPatientsAsync() =>
             await GetAll()

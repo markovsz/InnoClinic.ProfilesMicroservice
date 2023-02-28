@@ -9,7 +9,7 @@ namespace Infrastructure.Extensions
             DoctorStatuses enumVal;
             var parseResult = Enum.TryParse<DoctorStatuses>(enumValStr, out enumVal);
             if (!parseResult)
-                throw new InvalidOperationException($"doctor's status value is invalid");
+                throw new InvalidCastException($"doctor's status value is invalid");
             return enumVal;
         }
     }

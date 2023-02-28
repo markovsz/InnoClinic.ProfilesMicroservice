@@ -18,6 +18,10 @@ namespace Infrastructure.Repositories
         public async Task<Receptionist> GetReceptionistByIdAsync(Guid receptionistId, bool trackChanges) =>
             await GetByCondition(e => e.Id.Equals(receptionistId), trackChanges)
             .FirstOrDefaultAsync();
+        
+        public async Task<Receptionist> GetReceptionistByAccountIdAsync(string accountId, bool trackChanges) =>
+            await GetByCondition(e => e.AccountId.Equals(accountId), trackChanges)
+            .FirstOrDefaultAsync();
 
         public async Task<IEnumerable<Receptionist>> GetReceptionistsAsync() =>
             await GetAll()

@@ -6,6 +6,7 @@ namespace Domain.Interfaces
     {
         Task CreateReceptionistAsync(Receptionist receptionist);
         Task<Receptionist> GetReceptionistByIdAsync(Guid receptionistId, bool trackChanges);
+        Task<Receptionist> GetReceptionistByAccountIdAsync(string accountId, bool trackChanges);
         Task<IEnumerable<Receptionist>> GetReceptionistsAsync();
         void UpdateReceptionist(Receptionist receptionist);
         void DeleteReceptionist(Receptionist receptionist);

@@ -4,6 +4,7 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using Domain.Entities;
+using Domain.Exceptions;
 
 namespace Infrastructure.Services
 {
@@ -20,6 +21,10 @@ namespace Infrastructure.Services
 
         public async Task<Guid> CreatePatientAsync(PatientIncomingDto incomingDto)
         {
+            var patientForCheck = await _repositoryManager.Patients.GetPatientByAccountIdAsync(incomingDto.AccountId, false);
+            if (patientForCheck is not null)
+                throw new EntityAlreadyExistsException();
+
             var patient = _mapper.Map<Patient>(incomingDto);
             await _repositoryManager.Patients.CreatePatientAsync(patient);
             await _repositoryManager.SaveChangesAsync();
@@ -29,6 +34,8 @@ namespace Infrastructure.Services
         public async Task DeletePatientByIdAsync(Guid patientId)
         {
             var patient = await _repositoryManager.Patients.GetPatientByIdAsync(patientId, false);
+            if (patient is null)
+                throw new EntityNotFoundException();
             _repositoryManager.Patients.DeletePatient(patient);
             await _repositoryManager.SaveChangesAsync();
         }
@@ -47,10 +54,14 @@ namespace Infrastructure.Services
             return outgoingPatients;
         }
 
-        public async Task UpdatePatientAsync(Guid PatientId, PatientIncomingDto incomingDto)
+        public async Task UpdatePatientAsync(Guid patientId, PatientIncomingDto incomingDto)
         {
+            var patientForCheck = await _repositoryManager.Patients.GetPatientByIdAsync(patientId, false);
+            if (patientForCheck is null)
+                throw new EntityNotFoundException();
+
             var patient = _mapper.Map<Patient>(incomingDto);
-            patient.Id = PatientId;
+            patient.Id = patientId;
             _repositoryManager.Patients.UpdatePatient(patient);
             await _repositoryManager.SaveChangesAsync();
         }

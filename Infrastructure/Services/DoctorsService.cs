@@ -4,7 +4,9 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using Domain.Entities;
+using Domain.Exceptions;
 using Infrastructure.Extensions;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace Infrastructure.Services
 {
@@ -22,12 +24,18 @@ namespace Infrastructure.Services
         {
             var status = doctorStatus.FromStringToDoctorStatusesEnum();
             var doctor = await _repositoryManager.Doctors.GetDoctorByIdAsync(doctorId, true);
+            if (doctor is null)
+                throw new EntityNotFoundException();
             doctor.Status = status;
             await _repositoryManager.SaveChangesAsync();
         }
 
         public async Task<Guid> CreateDoctorAsync(DoctorIncomingDto incomingDto)
         {
+            var doctorForCheck = await _repositoryManager.Doctors.GetDoctorByAccountIdAsync(incomingDto.AccountId, false);
+            if (doctorForCheck is not null)
+                throw new EntityAlreadyExistsException();
+
             var doctor = _mapper.Map<Doctor>(incomingDto);
             await _repositoryManager.Doctors.CreateDoctorAsync(doctor);
             await _repositoryManager.SaveChangesAsync();
@@ -37,6 +45,8 @@ namespace Infrastructure.Services
         public async Task DeleteDoctorByIdAsync(Guid doctorId)
         {
             var doctor = await _repositoryManager.Doctors.GetDoctorByIdAsync(doctorId, false);
+            if (doctor is null)
+                throw new EntityNotFoundException();
             _repositoryManager.Doctors.DeleteDoctor(doctor);
             await _repositoryManager.SaveChangesAsync();
         }
@@ -57,6 +67,10 @@ namespace Infrastructure.Services
 
         public async Task UpdateDoctorAsync(Guid doctorId, DoctorIncomingDto incomingDto)
         {
+            var doctorForCheck = await _repositoryManager.Doctors.GetDoctorByIdAsync(doctorId, false);
+            if (doctorForCheck is null)
+                throw new EntityNotFoundException();
+
             var doctor = _mapper.Map<Doctor>(incomingDto);
             doctor.Id = doctorId;
             _repositoryManager.Doctors.UpdateDoctor(doctor);
