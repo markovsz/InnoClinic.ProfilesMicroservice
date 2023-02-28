@@ -1,8 +1,6 @@
 ﻿namespace Application.DTOs.Outgoing
 {
-    public class DoctorsPaginationOutgoingDto
+    public class DoctorsPaginationOutgoingDto : PaginationOutgoingDto<DoctorOutgoingDto>
     {
-        public IEnumerable<DoctorOutgoingDto> Doctors { get; set; }
-        public int PagesCount { get; set; }
     }
 }

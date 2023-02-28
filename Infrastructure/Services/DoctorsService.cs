@@ -56,7 +56,7 @@ namespace Infrastructure.Services
             var doctorsCount = await _repositoryManager.Doctors.GetDoctorsCountAsync(parameters);
             var paginationResult = new DoctorsPaginationOutgoingDto
             {
-                Doctors = outgoingDoctors,
+                Entities = outgoingDoctors,
                 PagesCount = (doctorsCount + parameters.Size - 1) / parameters.Size
             };
             return paginationResult;
