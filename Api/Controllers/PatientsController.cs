@@ -1,5 +1,7 @@
 ﻿using Application.DTOs.Incoming;
+using Application.DTOs.Outgoing;
 using Application.Interfaces;
+using Domain.RequestParameters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -30,9 +32,9 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPatientsAsync()
+        public async Task<IActionResult> GetPatientsAsync([FromQuery] PatientParameters parameters)
         {
-            var patient = await _patientsService.GetPatientsAsync();
+            var patient = await _patientsService.GetPatientsAsync(parameters);
             return Ok(patient);
         }
 

@@ -21,5 +21,17 @@ namespace Infrastructure.Extensions
 
             return doctors;
         }
+
+        public static IQueryable<Patient> PatientParametersHandler(this IQueryable<Patient> patients, PatientParameters parameters)
+        {
+            if (parameters.FirstNameSearch is not null)
+                patients = patients.Where(e => e.FirstName.Contains(parameters.FirstNameSearch));
+            if (parameters.LastNameSearch is not null)
+                patients = patients.Where(e => e.LastName.Contains(parameters.LastNameSearch));
+            if (parameters.MiddleNameSearch is not null)
+                patients = patients.Where(e => e.MiddleName.Contains(parameters.MiddleNameSearch));
+
+            return patients;
+        }
     }
 }

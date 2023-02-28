@@ -4,6 +4,7 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using Domain.Entities;
+using Domain.RequestParameters;
 
 namespace Infrastructure.Services
 {
@@ -40,11 +41,17 @@ namespace Infrastructure.Services
             return outgoingPatient;
         }
 
-        public async Task<IEnumerable<PatientOutgoingDto>> GetPatientsAsync()
+        public async Task<PatientsPaginationOutgoingDto> GetPatientsAsync(PatientParameters parameters)
         {
-            var patients = await _repositoryManager.Patients.GetPatientsAsync();
+            var patients = await _repositoryManager.Patients.GetPatientsAsync(parameters);
             var outgoingPatients = _mapper.Map<IEnumerable<PatientOutgoingDto>>(patients);
-            return outgoingPatients;
+            var patientsCount = await _repositoryManager.Patients.GetPatientsCountAsync(parameters);
+            var paginationResult = new PatientsPaginationOutgoingDto
+            {
+                Entities = outgoingPatients,
+                PagesCount = (patientsCount + parameters.Size - 1) / parameters.Size
+            };
+            return paginationResult;
         }
 
         public async Task UpdatePatientAsync(Guid PatientId, PatientIncomingDto incomingDto)
