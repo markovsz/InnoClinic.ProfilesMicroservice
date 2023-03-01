@@ -4,6 +4,7 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using Domain.Entities;
+using Domain.RequestParameters;
 using Domain.Exceptions;
 using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore.Query;
@@ -58,11 +59,17 @@ namespace Infrastructure.Services
             return outgoingDoctor;
         }
 
-        public async Task<IEnumerable<DoctorOutgoingDto>> GetDoctorsAsync()
+        public async Task<DoctorsPaginationOutgoingDto> GetDoctorsAsync(DoctorParameters parameters)
         {
-            var doctors = await _repositoryManager.Doctors.GetDoctorsAsync();
+            var doctors = await _repositoryManager.Doctors.GetDoctorsAsync(parameters);
             var outgoingDoctors = _mapper.Map<IEnumerable<DoctorOutgoingDto>>(doctors);
-            return outgoingDoctors;
+            var doctorsCount = await _repositoryManager.Doctors.GetDoctorsCountAsync(parameters);
+            var paginationResult = new DoctorsPaginationOutgoingDto
+            {
+                Entities = outgoingDoctors,
+                PagesCount = (doctorsCount + parameters.Size - 1) / parameters.Size
+            };
+            return paginationResult;
         }
 
         public async Task UpdateDoctorAsync(Guid doctorId, DoctorIncomingDto incomingDto)

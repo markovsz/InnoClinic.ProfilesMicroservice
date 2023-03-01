@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Incoming;
 using Application.Interfaces;
+using Domain.RequestParameters;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,9 +34,9 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetDoctorsAsync()
+        public async Task<IActionResult> GetDoctorsAsync([FromQuery] DoctorParameters parameters)
         {
-            var doctor = await _doctorsService.GetDoctorsAsync();
+            var doctor = await _doctorsService.GetDoctorsAsync(parameters);
             return Ok(doctor);
         }
 
