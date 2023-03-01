@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Incoming;
 using Application.Interfaces;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -9,15 +10,18 @@ namespace Api.Controllers
     public class PatientsController : ControllerBase
     {
         private readonly IPatientsService _patientsService;
+        private readonly IValidator<PatientIncomingDto> _validator;
 
-        public PatientsController(IPatientsService patientsService)
+        public PatientsController(IPatientsService patientsService, IValidator<PatientIncomingDto> validator)
         {
             _patientsService = patientsService;
+            _validator = validator;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreatePatientAsync([FromBody] PatientIncomingDto incomingDto)
         {
+            await _validator.ValidateAndThrowAsync(incomingDto);
             var patientId = await _patientsService.CreatePatientAsync(incomingDto);
             return Created($"patient/{patientId}", patientId);
         }
@@ -39,6 +43,7 @@ namespace Api.Controllers
         [HttpPut("patient/{patientId}")]
         public async Task<IActionResult> UpdatePatientAsync(Guid patientId, [FromBody] PatientIncomingDto incomingDto)
         {
+            await _validator.ValidateAndThrowAsync(incomingDto);
             await _patientsService.UpdatePatientAsync(patientId, incomingDto);
             return NoContent();
         }

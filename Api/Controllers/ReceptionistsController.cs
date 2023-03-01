@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Incoming;
 using Application.Interfaces;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -9,15 +10,18 @@ namespace Api.Controllers
     public class ReceptionistsController : ControllerBase
     {
         private readonly IReceptionistsService _receptionistsService;
+        private readonly IValidator<ReceptionistIncomingDto> _validator;
 
-        public ReceptionistsController(IReceptionistsService receptionistsService)
+        public ReceptionistsController(IReceptionistsService receptionistsService, IValidator<ReceptionistIncomingDto> validator)
         {
             _receptionistsService = receptionistsService;
+            _validator = validator;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateReceptionistAsync([FromBody] ReceptionistIncomingDto incomingDto)
         {
+            await _validator.ValidateAndThrowAsync(incomingDto);
             var receptionistId = await _receptionistsService.CreateReceptionistAsync(incomingDto);
             return Created($"receptionist/{receptionistId}", receptionistId);
         }
@@ -39,6 +43,7 @@ namespace Api.Controllers
         [HttpPut("receptionist/{receptionistId}")]
         public async Task<IActionResult> UpdateReceptionistAsync(Guid receptionistId, [FromBody] ReceptionistIncomingDto incomingDto)
         {
+            await _validator.ValidateAndThrowAsync(incomingDto);
             await _receptionistsService.UpdateReceptionistAsync(receptionistId, incomingDto);
             return NoContent();
         }

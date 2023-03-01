@@ -7,6 +7,7 @@ builder.Services.ConfigureDb(builder.Configuration);
 builder.Services.ConfigureRepositoryManager();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.ConfigureServices();
+builder.Services.ConfigureValidators();
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
