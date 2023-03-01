@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Incoming;
 using Application.DTOs.Outgoing;
+using Domain.RequestParameters;
 
 namespace Application.Interfaces
 {
@@ -7,8 +8,9 @@ namespace Application.Interfaces
     {
         public Task<Guid> CreateDoctorAsync(DoctorIncomingDto incomingDto);
         public Task<DoctorOutgoingDto> GetDoctorByIdAsync(Guid doctorId);
-        public Task<IEnumerable<DoctorOutgoingDto>> GetDoctorsAsync();
+        public Task<DoctorsPaginationOutgoingDto> GetDoctorsAsync(DoctorParameters parameters);
         public Task UpdateDoctorAsync(Guid doctorId, DoctorIncomingDto incomingDto);
         public Task DeleteDoctorByIdAsync(Guid doctorId);
+        public Task ChangeDoctorStatusAsync(Guid doctorId, string doctorStatus);
     }
 }

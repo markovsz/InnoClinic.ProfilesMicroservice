@@ -4,6 +4,8 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using Domain.Entities;
+using Domain.RequestParameters;
+using Domain.Exceptions;
 
 namespace Infrastructure.Services
 {
@@ -20,6 +22,10 @@ namespace Infrastructure.Services
 
         public async Task<Guid> CreatePatientAsync(PatientIncomingDto incomingDto)
         {
+            var patientForCheck = await _repositoryManager.Patients.GetPatientByAccountIdAsync(incomingDto.AccountId, false);
+            if (patientForCheck is not null)
+                throw new EntityAlreadyExistsException();
+
             var patient = _mapper.Map<Patient>(incomingDto);
             await _repositoryManager.Patients.CreatePatientAsync(patient);
             await _repositoryManager.SaveChangesAsync();
@@ -29,6 +35,8 @@ namespace Infrastructure.Services
         public async Task DeletePatientByIdAsync(Guid patientId)
         {
             var patient = await _repositoryManager.Patients.GetPatientByIdAsync(patientId, false);
+            if (patient is null)
+                throw new EntityNotFoundException();
             _repositoryManager.Patients.DeletePatient(patient);
             await _repositoryManager.SaveChangesAsync();
         }
@@ -40,17 +48,27 @@ namespace Infrastructure.Services
             return outgoingPatient;
         }
 
-        public async Task<IEnumerable<PatientOutgoingDto>> GetPatientsAsync()
+        public async Task<PatientsPaginationOutgoingDto> GetPatientsAsync(PatientParameters parameters)
         {
-            var patients = await _repositoryManager.Patients.GetPatientsAsync();
+            var patients = await _repositoryManager.Patients.GetPatientsAsync(parameters);
             var outgoingPatients = _mapper.Map<IEnumerable<PatientOutgoingDto>>(patients);
-            return outgoingPatients;
+            var patientsCount = await _repositoryManager.Patients.GetPatientsCountAsync(parameters);
+            var paginationResult = new PatientsPaginationOutgoingDto
+            {
+                Entities = outgoingPatients,
+                PagesCount = (patientsCount + parameters.Size - 1) / parameters.Size
+            };
+            return paginationResult;
         }
 
-        public async Task UpdatePatientAsync(Guid PatientId, PatientIncomingDto incomingDto)
+        public async Task UpdatePatientAsync(Guid patientId, PatientIncomingDto incomingDto)
         {
+            var patientForCheck = await _repositoryManager.Patients.GetPatientByIdAsync(patientId, false);
+            if (patientForCheck is null)
+                throw new EntityNotFoundException();
+
             var patient = _mapper.Map<Patient>(incomingDto);
-            patient.Id = PatientId;
+            patient.Id = patientId;
             _repositoryManager.Patients.UpdatePatient(patient);
             await _repositoryManager.SaveChangesAsync();
         }

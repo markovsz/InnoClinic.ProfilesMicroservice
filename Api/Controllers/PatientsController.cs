@@ -1,5 +1,8 @@
 ﻿using Application.DTOs.Incoming;
+using Application.DTOs.Outgoing;
 using Application.Interfaces;
+using Domain.RequestParameters;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -9,10 +12,12 @@ namespace Api.Controllers
     public class PatientsController : ControllerBase
     {
         private readonly IPatientsService _patientsService;
+        private readonly IValidator<PatientIncomingDto> _validator;
 
-        public PatientsController(IPatientsService patientsService)
+        public PatientsController(IPatientsService patientsService, IValidator<PatientIncomingDto> validator)
         {
             _patientsService = patientsService;
+            _validator = validator;
         }
 
         [HttpPost]
@@ -30,9 +35,9 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPatientsAsync()
+        public async Task<IActionResult> GetPatientsAsync([FromQuery] PatientParameters parameters)
         {
-            var patient = await _patientsService.GetPatientsAsync();
+            var patient = await _patientsService.GetPatientsAsync(parameters);
             return Ok(patient);
         }
 

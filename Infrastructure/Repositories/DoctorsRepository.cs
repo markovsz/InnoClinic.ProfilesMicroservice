@@ -1,5 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces;
+using Domain.RequestParameters;
+using Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Repositories
@@ -18,10 +20,21 @@ namespace Infrastructure.Repositories
         public async Task<Doctor> GetDoctorByIdAsync(Guid doctorId, bool trackChanges) =>
             await GetByCondition(e => e.Id.Equals(doctorId), trackChanges)
             .FirstOrDefaultAsync();
+        
+        public async Task<Doctor> GetDoctorByAccountIdAsync(string accountId, bool trackChanges) =>
+            await GetByCondition(e => e.AccountId.Equals(accountId), trackChanges)
+            .FirstOrDefaultAsync();
 
-        public async Task<IEnumerable<Doctor>> GetDoctorsAsync() =>
+        public async Task<IEnumerable<Doctor>> GetDoctorsAsync(DoctorParameters parameters) =>
             await GetAll()
+            .ApplyPagination(parameters)
+            .DoctorParametersHandler(parameters)
             .ToListAsync();
+
+        public async Task<int> GetDoctorsCountAsync(DoctorParameters parameters) =>
+            await GetAll()
+            .DoctorParametersHandler(parameters)
+            .CountAsync();
 
         public void UpdateDoctor(Doctor doctor) => Update(doctor);
     }

@@ -1,5 +1,7 @@
 ﻿using Application.DTOs.Incoming;
 using Application.Interfaces;
+using Domain.RequestParameters;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -9,9 +11,11 @@ namespace Api.Controllers
     public class DoctorsController : ControllerBase
     {
         private readonly IDoctorsService _doctorsService;
+        private readonly IValidator<DoctorIncomingDto> _validator;
 
-        public DoctorsController(IDoctorsService doctorsService) {
+        public DoctorsController(IDoctorsService doctorsService, IValidator<DoctorIncomingDto> validator) {
             _doctorsService = doctorsService;
+            _validator = validator;
         }
 
         [HttpPost]
@@ -29,9 +33,9 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetDoctorsAsync()
+        public async Task<IActionResult> GetDoctorsAsync([FromQuery] DoctorParameters parameters)
         {
-            var doctor = await _doctorsService.GetDoctorsAsync();
+            var doctor = await _doctorsService.GetDoctorsAsync(parameters);
             return Ok(doctor);
         }
 
@@ -46,6 +50,13 @@ namespace Api.Controllers
         public async Task<IActionResult> DeleteDoctorAsync(Guid doctorId)
         {
             await _doctorsService.DeleteDoctorByIdAsync(doctorId);
+            return NoContent();
+        }
+
+        [HttpPut("doctor/{doctorId}/status")]
+        public async Task<IActionResult> ChangeDoctorStatusAsync(Guid doctorId, [FromBody] string statusName)
+        {
+            await _doctorsService.ChangeDoctorStatusAsync(doctorId, statusName);
             return NoContent();
         }
     }

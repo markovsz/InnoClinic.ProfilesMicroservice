@@ -2,13 +2,17 @@
 using Application.DTOs.Outgoing;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Enums;
+using Infrastructure.Extensions;
 
 namespace Infrastructure
 {
     public class MappingProfile : Profile
     {
         public MappingProfile() {
-            CreateMap<DoctorIncomingDto, Doctor>();
+            CreateMap<DoctorIncomingDto, Doctor>()
+                .ForMember(e => e.Status, options => 
+                    options.MapFrom(src => src.Status.FromStringToDoctorStatusesEnum()));
             CreateMap<Doctor, DoctorOutgoingDto>();
 
             CreateMap<PatientIncomingDto, Patient>();
@@ -17,5 +21,7 @@ namespace Infrastructure
             CreateMap<ReceptionistIncomingDto, Receptionist>();
             CreateMap<Receptionist, ReceptionistOutgoingDto>();
         }
+
+        
     }
 }

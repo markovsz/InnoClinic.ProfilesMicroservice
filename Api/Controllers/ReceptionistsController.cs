@@ -1,5 +1,6 @@
 ﻿using Application.DTOs.Incoming;
 using Application.Interfaces;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -9,10 +10,12 @@ namespace Api.Controllers
     public class ReceptionistsController : ControllerBase
     {
         private readonly IReceptionistsService _receptionistsService;
+        private readonly IValidator<ReceptionistIncomingDto> _validator;
 
-        public ReceptionistsController(IReceptionistsService receptionistsService)
+        public ReceptionistsController(IReceptionistsService receptionistsService, IValidator<ReceptionistIncomingDto> validator)
         {
             _receptionistsService = receptionistsService;
+            _validator = validator;
         }
 
         [HttpPost]
