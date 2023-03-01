@@ -1,4 +1,5 @@
 using Api.Extensions;
+using Api.Middlewares;
 using FluentValidation.AspNetCore;
 using Infrastructure;
 
@@ -22,6 +23,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<ExceptionsHandler>();
 
 app.UseHttpsRedirection();
 
