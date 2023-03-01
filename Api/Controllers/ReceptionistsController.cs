@@ -21,7 +21,6 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateReceptionistAsync([FromBody] ReceptionistIncomingDto incomingDto)
         {
-            await _validator.ValidateAndThrowAsync(incomingDto);
             var receptionistId = await _receptionistsService.CreateReceptionistAsync(incomingDto);
             return Created($"receptionist/{receptionistId}", receptionistId);
         }
@@ -43,7 +42,6 @@ namespace Api.Controllers
         [HttpPut("receptionist/{receptionistId}")]
         public async Task<IActionResult> UpdateReceptionistAsync(Guid receptionistId, [FromBody] ReceptionistIncomingDto incomingDto)
         {
-            await _validator.ValidateAndThrowAsync(incomingDto);
             await _receptionistsService.UpdateReceptionistAsync(receptionistId, incomingDto);
             return NoContent();
         }

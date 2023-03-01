@@ -21,7 +21,6 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateDoctorAsync([FromBody] DoctorIncomingDto incomingDto)
         {
-            await _validator.ValidateAndThrowAsync(incomingDto);
             var doctorId = await _doctorsService.CreateDoctorAsync(incomingDto);
             return Created($"doctor/{doctorId}", doctorId);
         }
@@ -43,7 +42,6 @@ namespace Api.Controllers
         [HttpPut("doctor/{doctorId}")]
         public async Task<IActionResult> UpdateDoctorAsync(Guid doctorId, [FromBody] DoctorIncomingDto incomingDto)
         {
-            await _validator.ValidateAndThrowAsync(incomingDto);
             await _doctorsService.UpdateDoctorAsync(doctorId, incomingDto);
             return NoContent();
         }
