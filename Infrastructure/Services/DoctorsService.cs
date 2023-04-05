@@ -63,6 +63,13 @@ namespace Infrastructure.Services
         {
             var doctors = await _repositoryManager.Doctors.GetDoctorsAsync(parameters);
             var outgoingDoctors = _mapper.Map<IEnumerable<DoctorOutgoingDto>>(doctors);
+            var doctorsIterator = doctors.GetEnumerator();
+            foreach(var outgoingDoctor in outgoingDoctors)
+            {
+                var doctor = doctorsIterator.Current;
+                outgoingDoctor.Experience = DateTime.Now.Year - doctor.CareerStartYear + 1;
+                doctorsIterator.MoveNext();
+            }
             var doctorsCount = await _repositoryManager.Doctors.GetDoctorsCountAsync(parameters);
             var paginationResult = new DoctorsPaginationOutgoingDto
             {

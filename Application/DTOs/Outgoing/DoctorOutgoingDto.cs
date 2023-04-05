@@ -12,7 +12,7 @@ namespace Application.DTOs.Outgoing
         public string AccountId { get; set; }
         public Guid SpecializationId { get; set; }
         public Guid OfficeId { get; set; }
-        public int CareerStartYear { get; set; }
+        public int Experience { get; set; }
         public DoctorStatuses Status { get; set; }
     }
 }
