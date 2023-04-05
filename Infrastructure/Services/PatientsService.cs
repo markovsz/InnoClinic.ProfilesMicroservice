@@ -61,6 +61,18 @@ namespace Infrastructure.Services
             return paginationResult;
         }
 
+        public async Task<IEnumerable<PatientOutgoingDto>> GetPatientsByIdsAsync(IEnumerable<Guid> ids)
+        {
+            var patients = new List<PatientOutgoingDto>();
+            foreach(var id in ids)
+            {
+                var patient = await _repositoryManager.Patients.GetPatientByIdAsync(id, false);
+                var mappedPatient = _mapper.Map<PatientOutgoingDto>(patient);
+                patients.Add(mappedPatient);
+            }
+            return patients;
+        }
+
         public async Task UpdatePatientAsync(Guid patientId, PatientIncomingDto incomingDto)
         {
             var patientForCheck = await _repositoryManager.Patients.GetPatientByIdAsync(patientId, false);

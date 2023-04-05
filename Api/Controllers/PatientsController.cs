@@ -27,6 +27,13 @@ namespace Api.Controllers
             return Created($"patient/{patientId}", patientId);
         }
 
+        [HttpPost("ids")]
+        public async Task<IActionResult> GetPatientsByIdsAsync([FromBody] IEnumerable<Guid> ids)
+        {
+            var patients = await _patientsService.GetPatientsByIdsAsync(ids);
+            return Ok(patients);
+        }
+
         [HttpGet("patient/{patientId}")]
         public async Task<IActionResult> GetPatientByIdAsync(Guid patientId)
         {
