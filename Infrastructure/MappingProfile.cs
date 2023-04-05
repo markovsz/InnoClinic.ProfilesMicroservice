@@ -13,7 +13,9 @@ namespace Infrastructure
             CreateMap<DoctorIncomingDto, Doctor>()
                 .ForMember(e => e.Status, options => 
                     options.MapFrom(src => src.Status.FromStringToDoctorStatusesEnum()));
-            CreateMap<Doctor, DoctorOutgoingDto>();
+            CreateMap<Doctor, DoctorOutgoingDto>()
+                .ForMember(e => e.Status, options =>
+                    options.MapFrom(src => src.Status.ToString()));
 
             CreateMap<PatientIncomingDto, Patient>();
             CreateMap<Patient, PatientOutgoingDto>();
