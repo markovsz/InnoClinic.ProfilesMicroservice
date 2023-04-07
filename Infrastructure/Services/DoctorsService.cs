@@ -79,6 +79,26 @@ namespace Infrastructure.Services
             return paginationResult;
         }
 
+        public async Task<DoctorsPaginationOutgoingDto> GetDoctorsAtWorkAsync(DoctorParameters parameters)
+        {
+            var doctors = await _repositoryManager.Doctors.GetDoctorsAtWorkAsync(parameters);
+            var outgoingDoctors = _mapper.Map<IEnumerable<DoctorOutgoingDto>>(doctors);
+            var doctorsIterator = doctors.GetEnumerator();
+            foreach (var outgoingDoctor in outgoingDoctors)
+            {
+                var doctor = doctorsIterator.Current;
+                outgoingDoctor.Experience = DateTime.Now.Year - doctor.CareerStartYear + 1;
+                doctorsIterator.MoveNext();
+            }
+            var doctorsCount = await _repositoryManager.Doctors.GetDoctorsCountAsync(parameters);
+            var paginationResult = new DoctorsPaginationOutgoingDto
+            {
+                Entities = outgoingDoctors,
+                PagesCount = (doctorsCount + parameters.Size - 1) / parameters.Size
+            };
+            return paginationResult;
+        }
+
         public async Task UpdateDoctorAsync(Guid doctorId, DoctorIncomingDto incomingDto)
         {
             var doctorForCheck = await _repositoryManager.Doctors.GetDoctorByIdAsync(doctorId, false);

@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Incoming;
+﻿using Api.Enums;
+using Application.DTOs.Incoming;
 using Application.Interfaces;
 using Domain.RequestParameters;
 using FluentValidation;
@@ -33,10 +34,19 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetDoctorsAsync([FromQuery] DoctorParameters parameters)
+        public async Task<IActionResult> GetDoctorsAsync([FromQuery] DoctorParameters parameters, string roleName)
         {
-            var doctor = await _doctorsService.GetDoctorsAsync(parameters);
-            return Ok(doctor);
+            if (roleName.Equals(UserRole.Patient))
+            {
+                var doctor = await _doctorsService.GetDoctorsAtWorkAsync(parameters);
+                return Ok(doctor);
+            }
+            else if(roleName.Equals(UserRole.Receptionist))
+            {
+                var doctor = await _doctorsService.GetDoctorsAsync(parameters);
+                return Ok(doctor);
+            }
+            return Forbid();
         }
 
         [HttpPut("doctor/{doctorId}")]
