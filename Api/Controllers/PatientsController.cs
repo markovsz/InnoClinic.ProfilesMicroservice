@@ -1,8 +1,11 @@
-﻿using Application.DTOs.Incoming;
+﻿using Api.Enums;
+using Api.FilterAttributes;
+using Application.DTOs.Incoming;
 using Application.DTOs.Outgoing;
 using Application.Interfaces;
 using Domain.RequestParameters;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
@@ -20,13 +23,16 @@ namespace Api.Controllers
             _validator = validator;
         }
 
+        [ServiceFilter(typeof(ExtractAccountIdAttribute))]
+        [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Receptionist)}")]
         [HttpPost]
-        public async Task<IActionResult> CreatePatientAsync([FromBody] PatientIncomingDto incomingDto)
+        public async Task<IActionResult> CreatePatientAsync([FromBody] PatientIncomingDto incomingDto, string? accountId)
         {
-            var patientId = await _patientsService.CreatePatientAsync(incomingDto);
+            var patientId = await _patientsService.CreatePatientAsync(incomingDto, accountId);
             return Created($"patient/{patientId}", patientId);
         }
 
+        [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Doctor)},{nameof(UserRole.Receptionist)}")]
         [HttpPost("ids")]
         public async Task<IActionResult> GetPatientsByIdsAsync([FromBody] IEnumerable<Guid> ids)
         {
@@ -34,6 +40,8 @@ namespace Api.Controllers
             return Ok(patients);
         }
 
+
+        [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Doctor)},{nameof(UserRole.Receptionist)}")]
         [HttpGet("patient/{patientId}")]
         public async Task<IActionResult> GetPatientByIdAsync(Guid patientId)
         {
@@ -41,6 +49,7 @@ namespace Api.Controllers
             return Ok(patient);
         }
 
+        [Authorize(Roles = $"{nameof(UserRole.Receptionist)}")]
         [HttpGet]
         public async Task<IActionResult> GetPatientsAsync([FromQuery] PatientParameters parameters)
         {
@@ -48,6 +57,7 @@ namespace Api.Controllers
             return Ok(patient);
         }
 
+        [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Receptionist)}")]
         [HttpPut("patient/{patientId}")]
         public async Task<IActionResult> UpdatePatientAsync(Guid patientId, [FromBody] PatientIncomingDto incomingDto)
         {
@@ -55,6 +65,7 @@ namespace Api.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = $"{nameof(UserRole.Receptionist)}")]
         [HttpDelete("patient/{patientId}")]
         public async Task<IActionResult> DeletePatientAsync(Guid patientId)
         {
