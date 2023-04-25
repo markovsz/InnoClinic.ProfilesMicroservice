@@ -1,4 +1,5 @@
-﻿using Application.DTOs.Incoming;
+﻿using Api.FilterAttributes;
+using Application.DTOs.Incoming;
 using Application.Interfaces;
 using Domain;
 using FluentValidation;
@@ -33,6 +34,12 @@ namespace Api.Extensions
             services.AddScoped<IReceptionistsService, ReceptionistsService>();
         }
         
+        public static void ConfigureFilterAttributes(this IServiceCollection services)
+        {
+            services.AddScoped<ExtractAccountIdAttribute>();
+            services.AddScoped<ExtractRoleAttribute>();
+        }
+
         public static void ConfigureValidators(this IServiceCollection services)
         {
             services.AddScoped<IValidator<DoctorIncomingDto>, DoctorIncomingDtoValidator>();

@@ -8,6 +8,9 @@ namespace Infrastructure.Validators
     {
         public DoctorIncomingDtoValidator() 
         {
+            RuleFor(e => e.FirstName).NotNull().NotEmpty();
+            RuleFor(e => e.LastName).NotNull().NotEmpty();
+            RuleFor(e => e.MiddleName).NotNull().NotEmpty();
             RuleFor(e => e.Status).IsEnumName(typeof(DoctorStatuses));
             RuleFor(e => e.CareerStartYear)
                 .GreaterThanOrEqualTo(1)

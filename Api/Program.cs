@@ -11,6 +11,7 @@ builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.ConfigureServices();
 builder.Services.ConfigureValidators();
 builder.Services.ConfigureAuthentication(builder.Configuration);
+builder.Services.ConfigureFilterAttributes();
 builder.Services.AddControllers()
     .AddFluentValidation(options => {
         options.RegisterValidatorsFromAssemblyContaining<Program>();
@@ -28,6 +29,8 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<ExceptionsHandler>();
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

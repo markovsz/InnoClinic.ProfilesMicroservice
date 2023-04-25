@@ -1,4 +1,6 @@
 ﻿using Api.Enums;
+using Api.Extensions;
+using Api.FilterAttributes;
 using Application.DTOs.Incoming;
 using Application.Interfaces;
 using Domain.RequestParameters;
@@ -25,7 +27,8 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateDoctorAsync([FromBody] DoctorIncomingDto incomingDto, string? accountId)
         {
-            _
+            var result = _doctorIncomingDtoValidator.Validate(incomingDto);
+            result.HandleValidationResult();
             var doctorId = await _doctorsService.CreateDoctorAsync(incomingDto, accountId);
             return Created($"doctor/{doctorId}", doctorId);
         }
@@ -60,6 +63,8 @@ namespace Api.Controllers
         [HttpPut("doctor/{doctorId}")]
         public async Task<IActionResult> UpdateDoctorAsync(Guid doctorId, [FromBody] DoctorIncomingDto incomingDto)
         {
+            var result = _doctorIncomingDtoValidator.Validate(incomingDto);
+            result.HandleValidationResult();
             await _doctorsService.UpdateDoctorAsync(doctorId, incomingDto);
             return NoContent();
         }

@@ -1,10 +1,13 @@
 ﻿using Api.Enums;
+using Api.Extensions;
 using Api.FilterAttributes;
 using Application.DTOs.Incoming;
 using Application.Interfaces;
 using FluentValidation;
+using Infrastructure.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace Api.Controllers
 {
@@ -13,12 +16,12 @@ namespace Api.Controllers
     public class ReceptionistsController : ControllerBase
     {
         private readonly IReceptionistsService _receptionistsService;
-        private readonly IValidator<ReceptionistIncomingDto> _validator;
+        private readonly IValidator<ReceptionistIncomingDto> _receptionistIncomingDtoValidator;
 
-        public ReceptionistsController(IReceptionistsService receptionistsService, IValidator<ReceptionistIncomingDto> validator)
+        public ReceptionistsController(IReceptionistsService receptionistsService, IValidator<ReceptionistIncomingDto> receptionistIncomingDtoValidator)
         {
             _receptionistsService = receptionistsService;
-            _validator = validator;
+            _receptionistIncomingDtoValidator = receptionistIncomingDtoValidator;
         }
 
         [ServiceFilter(typeof(ExtractAccountIdAttribute))]
@@ -26,6 +29,8 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateReceptionistAsync([FromBody] ReceptionistIncomingDto incomingDto, string? accountId)
         {
+            var result = _receptionistIncomingDtoValidator.Validate(incomingDto);
+            result.HandleValidationResult();
             var receptionistId = await _receptionistsService.CreateReceptionistAsync(incomingDto, accountId);
             return Created($"receptionist/{receptionistId}", receptionistId);
         }
@@ -50,6 +55,8 @@ namespace Api.Controllers
         [HttpPut("receptionist/{receptionistId}")]
         public async Task<IActionResult> UpdateReceptionistAsync(Guid receptionistId, [FromBody] ReceptionistIncomingDto incomingDto)
         {
+            var result = _receptionistIncomingDtoValidator.Validate(incomingDto);
+            result.HandleValidationResult();
             await _receptionistsService.UpdateReceptionistAsync(receptionistId, incomingDto);
             return NoContent();
         }

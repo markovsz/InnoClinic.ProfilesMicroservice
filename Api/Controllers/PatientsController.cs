@@ -1,12 +1,15 @@
 ﻿using Api.Enums;
+using Api.Extensions;
 using Api.FilterAttributes;
 using Application.DTOs.Incoming;
 using Application.DTOs.Outgoing;
 using Application.Interfaces;
 using Domain.RequestParameters;
 using FluentValidation;
+using Infrastructure.Validators;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace Api.Controllers
 {
@@ -15,12 +18,12 @@ namespace Api.Controllers
     public class PatientsController : ControllerBase
     {
         private readonly IPatientsService _patientsService;
-        private readonly IValidator<PatientIncomingDto> _validator;
+        private readonly IValidator<PatientIncomingDto> _patientIncomingDtoValidator;
 
-        public PatientsController(IPatientsService patientsService, IValidator<PatientIncomingDto> validator)
+        public PatientsController(IPatientsService patientsService, IValidator<PatientIncomingDto> patientIncomingDtoValidator)
         {
             _patientsService = patientsService;
-            _validator = validator;
+            _patientIncomingDtoValidator = patientIncomingDtoValidator;
         }
 
         [ServiceFilter(typeof(ExtractAccountIdAttribute))]
@@ -28,6 +31,8 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePatientAsync([FromBody] PatientIncomingDto incomingDto, string? accountId)
         {
+            var result = _patientIncomingDtoValidator.Validate(incomingDto);
+            result.HandleValidationResult();
             var patientId = await _patientsService.CreatePatientAsync(incomingDto, accountId);
             return Created($"patient/{patientId}", patientId);
         }
@@ -61,6 +66,8 @@ namespace Api.Controllers
         [HttpPut("patient/{patientId}")]
         public async Task<IActionResult> UpdatePatientAsync(Guid patientId, [FromBody] PatientIncomingDto incomingDto)
         {
+            var result = _patientIncomingDtoValidator.Validate(incomingDto);
+            result.HandleValidationResult();
             await _patientsService.UpdatePatientAsync(patientId, incomingDto);
             return NoContent();
         }
