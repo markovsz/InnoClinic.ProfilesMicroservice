@@ -20,9 +20,9 @@ namespace Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task<Guid> CreatePatientAsync(PatientIncomingDto incomingDto)
+        public async Task<Guid> CreatePatientAsync(PatientIncomingDto incomingDto, string accountId)
         {
-            var patientForCheck = await _repositoryManager.Patients.GetPatientByAccountIdAsync(incomingDto.AccountId, false);
+            var patientForCheck = await _repositoryManager.Patients.GetPatientByAccountIdAsync(accountId, false);
             if (patientForCheck is not null)
                 throw new EntityAlreadyExistsException();
 

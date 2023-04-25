@@ -31,9 +31,9 @@ namespace Infrastructure.Services
             await _repositoryManager.SaveChangesAsync();
         }
 
-        public async Task<Guid> CreateDoctorAsync(DoctorIncomingDto incomingDto)
+        public async Task<Guid> CreateDoctorAsync(DoctorIncomingDto incomingDto, string accountId)
         {
-            var doctorForCheck = await _repositoryManager.Doctors.GetDoctorByAccountIdAsync(incomingDto.AccountId, false);
+            var doctorForCheck = await _repositoryManager.Doctors.GetDoctorByAccountIdAsync(accountId, false);
             if (doctorForCheck is not null)
                 throw new EntityAlreadyExistsException();
 

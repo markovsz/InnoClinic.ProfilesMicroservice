@@ -5,7 +5,7 @@ namespace Application.Interfaces
 {
     public interface IReceptionistsService
     {
-        public Task<Guid> CreateReceptionistAsync(ReceptionistIncomingDto incomingDto);
+        public Task<Guid> CreateReceptionistAsync(ReceptionistIncomingDto incomingDto, string accountId);
         public Task<ReceptionistOutgoingDto> GetReceptionistByIdAsync(Guid receptionistId);
         public Task<IEnumerable<ReceptionistOutgoingDto>> GetReceptionistsAsync();
         public Task UpdateReceptionistAsync(Guid receptionistId, ReceptionistIncomingDto incomingDto);
