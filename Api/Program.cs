@@ -10,11 +10,12 @@ builder.Services.ConfigureRepositoryManager();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 builder.Services.ConfigureServices();
 builder.Services.ConfigureValidators();
+builder.Services.ConfigureAuthentication(builder.Configuration);
 builder.Services.AddControllers()
     .AddFluentValidation(options => {
         options.RegisterValidatorsFromAssemblyContaining<Program>();
     });
-builder.Services.AddSwaggerGen();
+builder.Services.ConfigureSwagger();
 
 var app = builder.Build();
 
