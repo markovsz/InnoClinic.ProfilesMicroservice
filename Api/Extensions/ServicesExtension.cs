@@ -1,14 +1,13 @@
 ﻿using Api.FilterAttributes;
-using Application.DTOs.Incoming;
 using Application.Interfaces;
 using Domain;
 using FluentValidation;
 using Infrastructure;
 using Infrastructure.Services;
 using Infrastructure.Validators;
+using InnoClinic.SharedModels.DTOs.Profiles.Incoming;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 

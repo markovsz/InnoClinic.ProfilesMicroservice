@@ -1,6 +1,6 @@
-﻿using Application.DTOs.Incoming;
-using Application.DTOs.Outgoing;
-using Domain.RequestParameters;
+﻿using Domain.RequestParameters;
+using InnoClinic.SharedModels.DTOs.Profiles.Incoming;
+using InnoClinic.SharedModels.DTOs.Profiles.Outgoing;
 
 namespace Application.Interfaces
 {

@@ -1,15 +1,10 @@
-﻿using Application.DTOs.Incoming;
-using Application.DTOs.Outgoing;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using Domain.Entities;
 using Domain.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using InnoClinic.SharedModels.DTOs.Profiles.Incoming;
+using InnoClinic.SharedModels.DTOs.Profiles.Outgoing;
 
 namespace Infrastructure.Services
 {

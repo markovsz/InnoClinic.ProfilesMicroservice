@@ -1,9 +1,8 @@
-﻿using Application.DTOs.Incoming;
-using Application.DTOs.Outgoing;
-using AutoMapper;
+﻿using AutoMapper;
 using Domain.Entities;
-using Domain.Enums;
 using Infrastructure.Extensions;
+using InnoClinic.SharedModels.DTOs.Profiles.Incoming;
+using InnoClinic.SharedModels.DTOs.Profiles.Outgoing;
 
 namespace Infrastructure
 {

@@ -1,15 +1,12 @@
 ﻿using Api.Enums;
 using Api.Extensions;
 using Api.FilterAttributes;
-using Application.DTOs.Incoming;
-using Application.DTOs.Outgoing;
 using Application.Interfaces;
 using Domain.RequestParameters;
 using FluentValidation;
-using Infrastructure.Validators;
+using InnoClinic.SharedModels.DTOs.Profiles.Incoming;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
 namespace Api.Controllers
 {

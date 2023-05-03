@@ -1,13 +1,12 @@
-﻿using Application.DTOs.Incoming;
-using Application.DTOs.Outgoing;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using Domain.Entities;
-using Domain.RequestParameters;
 using Domain.Exceptions;
+using Domain.RequestParameters;
 using Infrastructure.Extensions;
-using Microsoft.EntityFrameworkCore.Query;
+using InnoClinic.SharedModels.DTOs.Profiles.Incoming;
+using InnoClinic.SharedModels.DTOs.Profiles.Outgoing;
 
 namespace Infrastructure.Services
 {

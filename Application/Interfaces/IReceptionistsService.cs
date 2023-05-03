@@ -1,5 +1,5 @@
-﻿using Application.DTOs.Incoming;
-using Application.DTOs.Outgoing;
+﻿using InnoClinic.SharedModels.DTOs.Profiles.Incoming;
+using InnoClinic.SharedModels.DTOs.Profiles.Outgoing;
 
 namespace Application.Interfaces
 {
