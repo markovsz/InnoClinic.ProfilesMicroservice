@@ -9,6 +9,10 @@ namespace Infrastructure
     public class MappingProfile : Profile
     {
         public MappingProfile() {
+            CreateMap<UpdateDoctorIncomingDto, Doctor>()
+                .ForMember(e => e.Status, options =>
+                    options.MapFrom(src => src.Status.FromStringToDoctorStatusesEnum()));
+
             CreateMap<DoctorIncomingDto, Doctor>()
                 .ForMember(e => e.Status, options => 
                     options.MapFrom(src => src.Status.FromStringToDoctorStatusesEnum()));

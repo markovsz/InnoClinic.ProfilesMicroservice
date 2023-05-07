@@ -7,7 +7,9 @@ using Domain.RequestParameters;
 using Infrastructure.Extensions;
 using InnoClinic.SharedModels.DTOs.Profiles.Incoming;
 using InnoClinic.SharedModels.DTOs.Profiles.Outgoing;
+using InnoClinic.SharedModels.Messages;
 using MassTransit;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Services
 {
@@ -103,14 +105,15 @@ namespace Infrastructure.Services
             return paginationResult;
         }
 
-        public async Task UpdateDoctorAsync(Guid doctorId, DoctorIncomingDto incomingDto)
+        public async Task UpdateDoctorAsync(Guid doctorId, UpdateDoctorIncomingDto incomingDto)
         {
-            var doctorForCheck = await _repositoryManager.Doctors.GetDoctorByIdAsync(doctorId, false);
-            if (doctorForCheck is null)
+            var existingDoctor = await _repositoryManager.Doctors.GetDoctorByIdAsync(doctorId, false);
+            if (existingDoctor is null)
                 throw new EntityNotFoundException();
 
             var doctor = _mapper.Map<Doctor>(incomingDto);
             doctor.Id = doctorId;
+            doctor.AccountId = existingDoctor.AccountId;
             _repositoryManager.Doctors.UpdateDoctor(doctor);
             await _repositoryManager.SaveChangesAsync();
 

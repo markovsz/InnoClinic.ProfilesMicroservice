@@ -16,10 +16,13 @@ namespace Api.Controllers
     {
         private readonly IDoctorsService _doctorsService;
         private readonly IValidator<DoctorIncomingDto> _doctorIncomingDtoValidator;
+        private readonly IValidator<UpdateDoctorIncomingDto> _updateDoctorIncomingDtoValidator;
 
-        public DoctorsController(IDoctorsService doctorsService, IValidator<DoctorIncomingDto> doctorIncomingDtoValidator) {
+        public DoctorsController(IDoctorsService doctorsService, IValidator<DoctorIncomingDto> doctorIncomingDtoValidator, IValidator<UpdateDoctorIncomingDto> updateDoctorIncomingDtoValidator)
+        {
             _doctorsService = doctorsService;
             _doctorIncomingDtoValidator = doctorIncomingDtoValidator;
+            _updateDoctorIncomingDtoValidator = updateDoctorIncomingDtoValidator;
         }
 
         [ServiceFilter(typeof(ExtractAccountIdAttribute))]
@@ -61,9 +64,9 @@ namespace Api.Controllers
 
         [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Receptionist)}")]
         [HttpPut("doctor/{doctorId}")]
-        public async Task<IActionResult> UpdateDoctorAsync(Guid doctorId, [FromBody] DoctorIncomingDto incomingDto)
+        public async Task<IActionResult> UpdateDoctorAsync(Guid doctorId, [FromBody] UpdateDoctorIncomingDto incomingDto)
         {
-            var result = _doctorIncomingDtoValidator.Validate(incomingDto);
+            var result = _updateDoctorIncomingDtoValidator.Validate(incomingDto);
             result.HandleValidationResult();
             await _doctorsService.UpdateDoctorAsync(doctorId, incomingDto);
             return NoContent();
