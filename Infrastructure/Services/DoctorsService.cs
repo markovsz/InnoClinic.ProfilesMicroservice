@@ -7,16 +7,21 @@ using Domain.RequestParameters;
 using Infrastructure.Extensions;
 using InnoClinic.SharedModels.DTOs.Profiles.Incoming;
 using InnoClinic.SharedModels.DTOs.Profiles.Outgoing;
+using MassTransit;
 
 namespace Infrastructure.Services
 {
     public class DoctorsService : IDoctorsService
     {
         private IRepositoryManager _repositoryManager;
+        private readonly ISendEndpoint _sendEndpoint;
         private IMapper _mapper;
 
-        public DoctorsService(IRepositoryManager repositoryManager, IMapper mapper) { 
+        public DoctorsService(IRepositoryManager repositoryManager, IMapper mapper, IBus bus, IConfiguration configuration) { 
             _repositoryManager = repositoryManager;
+            var uri = configuration.GetSection("RabbitMq:Uri").Value;
+            var doctorUpdatedQueue = configuration.GetSection("RabbitMq:QueueNames:DoctorUpdated").Value;
+            _sendEndpoint = bus.GetSendEndpoint(new Uri(uri + doctorUpdatedQueue)).GetAwaiter().GetResult();
             _mapper = mapper;
         }
 
@@ -108,6 +113,14 @@ namespace Infrastructure.Services
             doctor.Id = doctorId;
             _repositoryManager.Doctors.UpdateDoctor(doctor);
             await _repositoryManager.SaveChangesAsync();
+
+            await _sendEndpoint.Send(new DoctorProfileUpdatedMessage
+            {
+                Id = doctorId,
+                DoctorFirstName = incomingDto.FirstName,
+                DoctorLastName = incomingDto.LastName,
+                DoctorMiddleName = incomingDto.MiddleName
+            });
         }
     }
 }

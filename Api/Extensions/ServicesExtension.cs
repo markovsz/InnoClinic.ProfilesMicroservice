@@ -6,6 +6,7 @@ using Infrastructure;
 using Infrastructure.Services;
 using Infrastructure.Validators;
 using InnoClinic.SharedModels.DTOs.Profiles.Incoming;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -41,6 +42,7 @@ namespace Api.Extensions
 
         public static void ConfigureValidators(this IServiceCollection services)
         {
+            services.AddScoped<IValidator<UpdateDoctorIncomingDto>, UpdateDoctorIncomingDtoValidator>();
             services.AddScoped<IValidator<DoctorIncomingDto>, DoctorIncomingDtoValidator>();
             services.AddScoped<IValidator<PatientIncomingDto>, PatientIncomingDtoValidator>();
             services.AddScoped<IValidator<ReceptionistIncomingDto>, ReceptionistIncomingDtoValidator>();
@@ -71,6 +73,17 @@ namespace Api.Extensions
 
                     ValidateAudience = true
                 };
+            });
+        }
+
+        public static void ConfigureMassTransit(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddMassTransit(e =>
+            {
+                e.UsingRabbitMq((_, cfg) => {
+                    cfg.Host(new Uri(configuration.GetSection("RabbitMq:ConnectionString").Value ??
+                                 throw new NotImplementedException()));
+                });
             });
         }
 
