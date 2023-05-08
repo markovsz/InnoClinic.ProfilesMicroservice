@@ -1,11 +1,11 @@
-﻿using Application.DTOs.Incoming;
-using Application.DTOs.Outgoing;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using Domain.Entities;
-using Domain.RequestParameters;
 using Domain.Exceptions;
+using Domain.RequestParameters;
+using InnoClinic.SharedModels.DTOs.Profiles.Incoming;
+using InnoClinic.SharedModels.DTOs.Profiles.Outgoing;
 
 namespace Infrastructure.Services
 {
@@ -20,9 +20,9 @@ namespace Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task<Guid> CreatePatientAsync(PatientIncomingDto incomingDto)
+        public async Task<Guid> CreatePatientAsync(PatientIncomingDto incomingDto, string accountId)
         {
-            var patientForCheck = await _repositoryManager.Patients.GetPatientByAccountIdAsync(incomingDto.AccountId, false);
+            var patientForCheck = await _repositoryManager.Patients.GetPatientByAccountIdAsync(accountId, false);
             if (patientForCheck is not null)
                 throw new EntityAlreadyExistsException();
 
@@ -59,6 +59,18 @@ namespace Infrastructure.Services
                 PagesCount = (patientsCount + parameters.Size - 1) / parameters.Size
             };
             return paginationResult;
+        }
+
+        public async Task<IEnumerable<PatientOutgoingDto>> GetPatientsByIdsAsync(IEnumerable<Guid> ids)
+        {
+            var patients = new List<PatientOutgoingDto>();
+            foreach(var id in ids)
+            {
+                var patient = await _repositoryManager.Patients.GetPatientByIdAsync(id, false);
+                var mappedPatient = _mapper.Map<PatientOutgoingDto>(patient);
+                patients.Add(mappedPatient);
+            }
+            return patients;
         }
 
         public async Task UpdatePatientAsync(Guid patientId, PatientIncomingDto incomingDto)

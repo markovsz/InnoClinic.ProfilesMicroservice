@@ -1,6 +1,6 @@
-﻿using Application.DTOs.Incoming;
-using Domain.Enums;
+﻿using Domain.Enums;
 using FluentValidation;
+using InnoClinic.SharedModels.DTOs.Profiles.Incoming;
 
 namespace Infrastructure.Validators
 {
@@ -8,6 +8,9 @@ namespace Infrastructure.Validators
     {
         public DoctorIncomingDtoValidator() 
         {
+            RuleFor(e => e.FirstName).NotNull().NotEmpty();
+            RuleFor(e => e.LastName).NotNull().NotEmpty();
+            RuleFor(e => e.MiddleName).NotNull().NotEmpty();
             RuleFor(e => e.Status).IsEnumName(typeof(DoctorStatuses));
             RuleFor(e => e.CareerStartYear)
                 .GreaterThanOrEqualTo(1)

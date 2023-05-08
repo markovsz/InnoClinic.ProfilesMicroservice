@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Enums;
 using Domain.Interfaces;
 using Domain.RequestParameters;
 using Infrastructure.Extensions;
@@ -24,6 +25,13 @@ namespace Infrastructure.Repositories
         public async Task<Doctor> GetDoctorByAccountIdAsync(string accountId, bool trackChanges) =>
             await GetByCondition(e => e.AccountId.Equals(accountId), trackChanges)
             .FirstOrDefaultAsync();
+
+        public async Task<IEnumerable<Doctor>> GetDoctorsAtWorkAsync(DoctorParameters parameters) =>
+            await GetAll()
+            .ApplyPagination(parameters)
+            .DoctorParametersHandler(parameters)
+            .Where(e => e.Status.Equals(DoctorStatuses.AtWork))
+            .ToListAsync();
 
         public async Task<IEnumerable<Doctor>> GetDoctorsAsync(DoctorParameters parameters) =>
             await GetAll()

@@ -1,4 +1,5 @@
 ﻿using Domain.Enums;
+using Domain.Exceptions;
 
 namespace Infrastructure.Extensions
 {
@@ -9,7 +10,7 @@ namespace Infrastructure.Extensions
             DoctorStatuses enumVal;
             var parseResult = Enum.TryParse<DoctorStatuses>(enumValStr, out enumVal);
             if (!parseResult)
-                throw new InvalidCastException($"doctor's status value is invalid");
+                throw new InvalidDoctorsStatusException();
             return enumVal;
         }
     }

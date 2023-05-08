@@ -1,19 +1,24 @@
-﻿using Application.DTOs.Incoming;
-using Application.DTOs.Outgoing;
-using AutoMapper;
+﻿using AutoMapper;
 using Domain.Entities;
-using Domain.Enums;
 using Infrastructure.Extensions;
+using InnoClinic.SharedModels.DTOs.Profiles.Incoming;
+using InnoClinic.SharedModels.DTOs.Profiles.Outgoing;
 
 namespace Infrastructure
 {
     public class MappingProfile : Profile
     {
         public MappingProfile() {
+            CreateMap<UpdateDoctorIncomingDto, Doctor>()
+                .ForMember(e => e.Status, options =>
+                    options.MapFrom(src => src.Status.FromStringToDoctorStatusesEnum()));
+
             CreateMap<DoctorIncomingDto, Doctor>()
                 .ForMember(e => e.Status, options => 
                     options.MapFrom(src => src.Status.FromStringToDoctorStatusesEnum()));
-            CreateMap<Doctor, DoctorOutgoingDto>();
+            CreateMap<Doctor, DoctorOutgoingDto>()
+                .ForMember(e => e.Status, options =>
+                    options.MapFrom(src => src.Status.ToString()));
 
             CreateMap<PatientIncomingDto, Patient>();
             CreateMap<Patient, PatientOutgoingDto>();

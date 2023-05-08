@@ -16,8 +16,8 @@ namespace Infrastructure.Extensions
 
             if (parameters.OfficeId is not null)
                 doctors = doctors.Where(e => e.OfficeId.Equals(parameters.OfficeId));
-            if (parameters.SpectializationId is not null)
-                doctors = doctors.Where(e => e.SpectializationId.Equals(parameters.SpectializationId));
+            if (parameters.SpecializationId is not null)
+                doctors = doctors.Where(e => e.SpecializationId.Equals(parameters.SpecializationId));
 
             return doctors;
         }

@@ -1,15 +1,10 @@
-﻿using Application.DTOs.Incoming;
-using Application.DTOs.Outgoing;
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using Domain.Entities;
 using Domain.Exceptions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using InnoClinic.SharedModels.DTOs.Profiles.Incoming;
+using InnoClinic.SharedModels.DTOs.Profiles.Outgoing;
 
 namespace Infrastructure.Services
 {
@@ -24,9 +19,9 @@ namespace Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task<Guid> CreateReceptionistAsync(ReceptionistIncomingDto incomingDto)
+        public async Task<Guid> CreateReceptionistAsync(ReceptionistIncomingDto incomingDto, string accountId)
         {
-            var receptionistForCheck = await _repositoryManager.Receptionists.GetReceptionistByAccountIdAsync(incomingDto.AccountId, false);
+            var receptionistForCheck = await _repositoryManager.Receptionists.GetReceptionistByAccountIdAsync(accountId, false);
             if (receptionistForCheck is not null)
                 throw new EntityAlreadyExistsException();
 
