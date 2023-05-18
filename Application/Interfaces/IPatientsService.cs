@@ -8,6 +8,7 @@ namespace Application.Interfaces
     {
         public Task<Guid> CreatePatientAsync(PatientIncomingDto incomingDto, string accountId);
         public Task<PatientOutgoingDto> GetPatientByIdAsync(Guid patientId);
+        public Task<PatientOutgoingDto> GetPatientProfileAsync(string accountId);
         public Task<PatientsPaginationOutgoingDto> GetPatientsAsync(PatientParameters parameters);
         public Task<IEnumerable<PatientOutgoingDto>> GetPatientsByIdsAsync(IEnumerable<Guid> ids);
         public Task UpdatePatientAsync(Guid patientId, PatientIncomingDto incomingDto);

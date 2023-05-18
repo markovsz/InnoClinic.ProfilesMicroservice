@@ -3,6 +3,7 @@ using Api.Extensions;
 using Api.FilterAttributes;
 using Application.Interfaces;
 using FluentValidation;
+using Infrastructure.Services;
 using InnoClinic.SharedModels.DTOs.Profiles.Incoming;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -39,6 +40,15 @@ namespace Api.Controllers
         {
             var receptionist = await _receptionistsService.GetReceptionistByIdAsync(receptionistId);
             return Ok(receptionist);
+        }
+
+        [ServiceFilter(typeof(ExtractAccountIdAttribute))]
+        [Authorize(Roles = $"{nameof(UserRole.Receptionist)}")]
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetReceptionistProfileAsync(string accountId)
+        {
+            var doctor = await _receptionistsService.GetReceptionistProfileAsync(accountId);
+            return Ok(doctor);
         }
 
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)}")]

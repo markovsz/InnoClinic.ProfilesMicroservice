@@ -47,6 +47,13 @@ namespace Infrastructure.Services
             return outgoingReceptionist;
         }
 
+        public async Task<ReceptionistOutgoingDto> GetReceptionistProfileAsync(string accountId)
+        {
+            var receptionist = await _repositoryManager.Receptionists.GetReceptionistByAccountIdAsync(accountId, false);
+            var outgoingReceptionist = _mapper.Map<ReceptionistOutgoingDto>(receptionist);
+            return outgoingReceptionist;
+        }
+
         public async Task<IEnumerable<ReceptionistOutgoingDto>> GetReceptionistsAsync()
         {
             var receptionists = await _repositoryManager.Receptionists.GetReceptionistsAsync();

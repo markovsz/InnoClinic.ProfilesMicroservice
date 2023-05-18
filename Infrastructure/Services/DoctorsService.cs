@@ -65,11 +65,19 @@ namespace Infrastructure.Services
             return outgoingDoctor;
         }
 
+        public async Task<DoctorOutgoingDto> GetDoctorProfileAsync(string accountId)
+        {
+            var doctor = await _repositoryManager.Doctors.GetDoctorByAccountIdAsync(accountId, false);
+            var outgoingDoctor = _mapper.Map<DoctorOutgoingDto>(doctor);
+            return outgoingDoctor;
+        }
+
         public async Task<DoctorsPaginationOutgoingDto> GetDoctorsAsync(DoctorParameters parameters)
         {
             var doctors = await _repositoryManager.Doctors.GetDoctorsAsync(parameters);
             var outgoingDoctors = _mapper.Map<IEnumerable<DoctorOutgoingDto>>(doctors);
             var doctorsIterator = doctors.GetEnumerator();
+            doctorsIterator.MoveNext();
             foreach(var outgoingDoctor in outgoingDoctors)
             {
                 var doctor = doctorsIterator.Current;
@@ -90,6 +98,7 @@ namespace Infrastructure.Services
             var doctors = await _repositoryManager.Doctors.GetDoctorsAtWorkAsync(parameters);
             var outgoingDoctors = _mapper.Map<IEnumerable<DoctorOutgoingDto>>(doctors);
             var doctorsIterator = doctors.GetEnumerator();
+            doctorsIterator.MoveNext();
             foreach (var outgoingDoctor in outgoingDoctors)
             {
                 var doctor = doctorsIterator.Current;
