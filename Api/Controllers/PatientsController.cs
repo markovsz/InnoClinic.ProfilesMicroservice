@@ -64,7 +64,7 @@ namespace Api.Controllers
         }
 
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)}")]
-        [HttpGet]
+        [HttpGet("list")]
         public async Task<IActionResult> GetPatientsAsync([FromQuery] PatientParameters parameters)
         {
             var patient = await _patientsService.GetPatientsAsync(parameters);

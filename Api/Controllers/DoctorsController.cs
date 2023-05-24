@@ -55,7 +55,7 @@ namespace Api.Controllers
 
         [ServiceFilter(typeof(ExtractRoleAttribute))]
         [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Receptionist)}")]
-        [HttpGet]
+        [HttpGet("list")]
         public async Task<IActionResult> GetDoctorsAsync([FromQuery] DoctorParameters parameters, string? roleName)
         {
             if (roleName.Equals(nameof(UserRole.Patient)))

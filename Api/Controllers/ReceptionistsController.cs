@@ -54,7 +54,7 @@ namespace Api.Controllers
         }
 
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)}")]
-        [HttpGet]
+        [HttpGet("list")]
         public async Task<IActionResult> GetReceptionistsAsync()
         {
             var receptionist = await _receptionistsService.GetReceptionistsAsync();
