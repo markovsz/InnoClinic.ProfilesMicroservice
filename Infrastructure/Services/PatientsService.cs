@@ -48,6 +48,13 @@ namespace Infrastructure.Services
             return outgoingPatient;
         }
 
+        public async Task<PatientOutgoingDto> GetPatientProfileAsync(string accountId)
+        {
+            var patient = await _repositoryManager.Patients.GetPatientByAccountIdAsync(accountId, false);
+            var outgoingPatient = _mapper.Map<PatientOutgoingDto>(patient);
+            return outgoingPatient;
+        }
+
         public async Task<PatientsPaginationOutgoingDto> GetPatientsAsync(PatientParameters parameters)
         {
             var patients = await _repositoryManager.Patients.GetPatientsAsync(parameters);
@@ -73,7 +80,7 @@ namespace Infrastructure.Services
             return patients;
         }
 
-        public async Task UpdatePatientAsync(Guid patientId, PatientIncomingDto incomingDto)
+        public async Task UpdatePatientAsync(Guid patientId, UpdatePatientIncomingDto incomingDto)
         {
             var patientForCheck = await _repositoryManager.Patients.GetPatientByIdAsync(patientId, false);
             if (patientForCheck is null)

@@ -7,8 +7,9 @@ namespace Application.Interfaces
     {
         public Task<Guid> CreateReceptionistAsync(ReceptionistIncomingDto incomingDto, string accountId);
         public Task<ReceptionistOutgoingDto> GetReceptionistByIdAsync(Guid receptionistId);
+        public Task<ReceptionistOutgoingDto> GetReceptionistProfileAsync(string accountId);
         public Task<IEnumerable<ReceptionistOutgoingDto>> GetReceptionistsAsync();
-        public Task UpdateReceptionistAsync(Guid receptionistId, ReceptionistIncomingDto incomingDto);
+        public Task UpdateReceptionistAsync(Guid receptionistId, UpdateReceptionistIncomingDto incomingDto);
         public Task DeleteReceptionistByIdAsync(Guid receptionistId);
     }
 }

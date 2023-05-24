@@ -43,6 +43,8 @@ namespace Api.Extensions
         public static void ConfigureValidators(this IServiceCollection services)
         {
             services.AddScoped<IValidator<UpdateDoctorIncomingDto>, UpdateDoctorIncomingDtoValidator>();
+            services.AddScoped<IValidator<UpdatePatientIncomingDto>, UpdatePatientIncomingDtoValidator>();
+            services.AddScoped<IValidator<UpdateReceptionistIncomingDto>, UpdateReceptionistIncomingDtoValidator>();
             services.AddScoped<IValidator<DoctorIncomingDto>, DoctorIncomingDtoValidator>();
             services.AddScoped<IValidator<PatientIncomingDto>, PatientIncomingDtoValidator>();
             services.AddScoped<IValidator<ReceptionistIncomingDto>, ReceptionistIncomingDtoValidator>();

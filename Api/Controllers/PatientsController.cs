@@ -4,6 +4,7 @@ using Api.FilterAttributes;
 using Application.Interfaces;
 using Domain.RequestParameters;
 using FluentValidation;
+using Infrastructure.Services;
 using InnoClinic.SharedModels.DTOs.Profiles.Incoming;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,11 +17,13 @@ namespace Api.Controllers
     {
         private readonly IPatientsService _patientsService;
         private readonly IValidator<PatientIncomingDto> _patientIncomingDtoValidator;
+        private readonly IValidator<UpdatePatientIncomingDto> _updatePatientIncomingDtoValidator;
 
-        public PatientsController(IPatientsService patientsService, IValidator<PatientIncomingDto> patientIncomingDtoValidator)
+        public PatientsController(IPatientsService patientsService, IValidator<PatientIncomingDto> patientIncomingDtoValidator, IValidator<UpdatePatientIncomingDto> updatePatientIncomingDtoValidator)
         {
             _patientsService = patientsService;
             _patientIncomingDtoValidator = patientIncomingDtoValidator;
+            _updatePatientIncomingDtoValidator = updatePatientIncomingDtoValidator;
         }
 
         [ServiceFilter(typeof(ExtractAccountIdAttribute))]
@@ -51,8 +54,17 @@ namespace Api.Controllers
             return Ok(patient);
         }
 
+        [ServiceFilter(typeof(ExtractAccountIdAttribute))]
+        [Authorize(Roles = $"{nameof(UserRole.Patient)}")]
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetPatientProfileAsync(string? accountId)
+        {
+            var doctor = await _patientsService.GetPatientProfileAsync(accountId);
+            return Ok(doctor);
+        }
+
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)}")]
-        [HttpGet]
+        [HttpGet("list")]
         public async Task<IActionResult> GetPatientsAsync([FromQuery] PatientParameters parameters)
         {
             var patient = await _patientsService.GetPatientsAsync(parameters);
@@ -61,9 +73,9 @@ namespace Api.Controllers
 
         [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Receptionist)}")]
         [HttpPut("patient/{patientId}")]
-        public async Task<IActionResult> UpdatePatientAsync(Guid patientId, [FromBody] PatientIncomingDto incomingDto)
+        public async Task<IActionResult> UpdatePatientAsync(Guid patientId, [FromBody] UpdatePatientIncomingDto incomingDto)
         {
-            var result = _patientIncomingDtoValidator.Validate(incomingDto);
+            var result = _updatePatientIncomingDtoValidator.Validate(incomingDto);
             result.HandleValidationResult();
             await _patientsService.UpdatePatientAsync(patientId, incomingDto);
             return NoContent();

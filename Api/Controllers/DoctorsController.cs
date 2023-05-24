@@ -44,17 +44,26 @@ namespace Api.Controllers
             return Ok(doctor);
         }
 
+        [ServiceFilter(typeof(ExtractAccountIdAttribute))]
+        [Authorize(Roles = $"{nameof(UserRole.Doctor)}")]
+        [HttpGet("profile")]
+        public async Task<IActionResult> GetDoctorProfileAsync(string? accountId)
+        {
+            var doctor = await _doctorsService.GetDoctorProfileAsync(accountId);
+            return Ok(doctor);
+        }
+
         [ServiceFilter(typeof(ExtractRoleAttribute))]
         [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Receptionist)}")]
-        [HttpGet]
+        [HttpGet("list")]
         public async Task<IActionResult> GetDoctorsAsync([FromQuery] DoctorParameters parameters, string? roleName)
         {
-            if (roleName.Equals(UserRole.Patient))
+            if (roleName.Equals(nameof(UserRole.Patient)))
             {
                 var doctor = await _doctorsService.GetDoctorsAtWorkAsync(parameters);
                 return Ok(doctor);
             }
-            else if(roleName.Equals(UserRole.Receptionist))
+            else if(roleName.Equals(nameof(UserRole.Receptionist)))
             {
                 var doctor = await _doctorsService.GetDoctorsAsync(parameters);
                 return Ok(doctor);

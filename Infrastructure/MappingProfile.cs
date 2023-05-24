@@ -21,9 +21,11 @@ namespace Infrastructure
                     options.MapFrom(src => src.Status.ToString()));
 
             CreateMap<PatientIncomingDto, Patient>();
+            CreateMap<UpdatePatientIncomingDto, Patient>();
             CreateMap<Patient, PatientOutgoingDto>();
 
             CreateMap<ReceptionistIncomingDto, Receptionist>();
+            CreateMap<UpdateReceptionistIncomingDto, Receptionist>();
             CreateMap<Receptionist, ReceptionistOutgoingDto>();
         }
 
