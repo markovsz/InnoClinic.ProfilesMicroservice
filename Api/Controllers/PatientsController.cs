@@ -57,7 +57,7 @@ namespace Api.Controllers
         [ServiceFilter(typeof(ExtractAccountIdAttribute))]
         [Authorize(Roles = $"{nameof(UserRole.Patient)}")]
         [HttpGet("profile")]
-        public async Task<IActionResult> GetPatientProfileAsync(string accountId)
+        public async Task<IActionResult> GetPatientProfileAsync(string? accountId)
         {
             var doctor = await _patientsService.GetPatientProfileAsync(accountId);
             return Ok(doctor);
