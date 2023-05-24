@@ -80,7 +80,7 @@ namespace Infrastructure.Services
             return patients;
         }
 
-        public async Task UpdatePatientAsync(Guid patientId, PatientIncomingDto incomingDto)
+        public async Task UpdatePatientAsync(Guid patientId, UpdatePatientIncomingDto incomingDto)
         {
             var patientForCheck = await _repositoryManager.Patients.GetPatientByIdAsync(patientId, false);
             if (patientForCheck is null)

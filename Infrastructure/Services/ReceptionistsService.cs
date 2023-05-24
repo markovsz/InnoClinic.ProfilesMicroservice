@@ -61,7 +61,7 @@ namespace Infrastructure.Services
             return outgoingReceptionists;
         }
 
-        public async Task UpdateReceptionistAsync(Guid receptionistId, ReceptionistIncomingDto incomingDto)
+        public async Task UpdateReceptionistAsync(Guid receptionistId, UpdateReceptionistIncomingDto incomingDto)
         {
             var receptionistForCheck = await _repositoryManager.Receptionists.GetReceptionistByIdAsync(receptionistId, false);
             if (receptionistForCheck is null)

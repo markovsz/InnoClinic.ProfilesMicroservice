@@ -31,7 +31,7 @@
 
   <ItemGroup>
     <Reference Include="InnoClinic.SharedModels">
-      <HintPath>..\..\InnoClinic.SharedModels\InnoClinic.SharedModels\bin\Debug\net6.0\InnoClinic.SharedModels.dll</HintPath>
+      <HintPath>..\..\InnoClinic.SharedModels\InnoClinic.SharedModels\bin\Release\net6.0\InnoClinic.SharedModels.dll</HintPath>
     </Reference>
   </ItemGroup>
 

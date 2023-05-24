@@ -17,11 +17,13 @@ namespace Api.Controllers
     {
         private readonly IPatientsService _patientsService;
         private readonly IValidator<PatientIncomingDto> _patientIncomingDtoValidator;
+        private readonly IValidator<UpdatePatientIncomingDto> _updatePatientIncomingDtoValidator;
 
-        public PatientsController(IPatientsService patientsService, IValidator<PatientIncomingDto> patientIncomingDtoValidator)
+        public PatientsController(IPatientsService patientsService, IValidator<PatientIncomingDto> patientIncomingDtoValidator, IValidator<UpdatePatientIncomingDto> updatePatientIncomingDtoValidator)
         {
             _patientsService = patientsService;
             _patientIncomingDtoValidator = patientIncomingDtoValidator;
+            _updatePatientIncomingDtoValidator = updatePatientIncomingDtoValidator;
         }
 
         [ServiceFilter(typeof(ExtractAccountIdAttribute))]
@@ -71,9 +73,9 @@ namespace Api.Controllers
 
         [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Receptionist)}")]
         [HttpPut("patient/{patientId}")]
-        public async Task<IActionResult> UpdatePatientAsync(Guid patientId, [FromBody] PatientIncomingDto incomingDto)
+        public async Task<IActionResult> UpdatePatientAsync(Guid patientId, [FromBody] UpdatePatientIncomingDto incomingDto)
         {
-            var result = _patientIncomingDtoValidator.Validate(incomingDto);
+            var result = _updatePatientIncomingDtoValidator.Validate(incomingDto);
             result.HandleValidationResult();
             await _patientsService.UpdatePatientAsync(patientId, incomingDto);
             return NoContent();

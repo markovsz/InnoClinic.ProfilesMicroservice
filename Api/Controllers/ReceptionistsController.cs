@@ -16,11 +16,13 @@ namespace Api.Controllers
     {
         private readonly IReceptionistsService _receptionistsService;
         private readonly IValidator<ReceptionistIncomingDto> _receptionistIncomingDtoValidator;
+        private readonly IValidator<UpdateReceptionistIncomingDto> _updateReceptionistIncomingDtoValidator;
 
-        public ReceptionistsController(IReceptionistsService receptionistsService, IValidator<ReceptionistIncomingDto> receptionistIncomingDtoValidator)
+        public ReceptionistsController(IReceptionistsService receptionistsService, IValidator<ReceptionistIncomingDto> receptionistIncomingDtoValidator, IValidator<UpdateReceptionistIncomingDto> updateReceptionistIncomingDtoValidator)
         {
             _receptionistsService = receptionistsService;
             _receptionistIncomingDtoValidator = receptionistIncomingDtoValidator;
+            _updateReceptionistIncomingDtoValidator = updateReceptionistIncomingDtoValidator;
         }
 
         [ServiceFilter(typeof(ExtractAccountIdAttribute))]
@@ -61,9 +63,9 @@ namespace Api.Controllers
 
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)}")]
         [HttpPut("receptionist/{receptionistId}")]
-        public async Task<IActionResult> UpdateReceptionistAsync(Guid receptionistId, [FromBody] ReceptionistIncomingDto incomingDto)
+        public async Task<IActionResult> UpdateReceptionistAsync(Guid receptionistId, [FromBody] UpdateReceptionistIncomingDto incomingDto)
         {
-            var result = _receptionistIncomingDtoValidator.Validate(incomingDto);
+            var result = _updateReceptionistIncomingDtoValidator.Validate(incomingDto);
             result.HandleValidationResult();
             await _receptionistsService.UpdateReceptionistAsync(receptionistId, incomingDto);
             return NoContent();
