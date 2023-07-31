@@ -12,6 +12,7 @@ namespace Application.Interfaces
         public Task<PatientsPaginationOutgoingDto> GetPatientsAsync(PatientParameters parameters);
         public Task<IEnumerable<PatientOutgoingDto>> GetPatientsByIdsAsync(IEnumerable<Guid> ids);
         public Task UpdatePatientAsync(Guid patientId, UpdatePatientIncomingDto incomingDto);
+        public Task UpdatePatientProfileAsync(string accountId, UpdatePatientIncomingDto incomingDto);
         public Task DeletePatientByIdAsync(Guid patientId);
     }
 }

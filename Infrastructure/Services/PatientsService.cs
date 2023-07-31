@@ -92,6 +92,20 @@ namespace Infrastructure.Services
 
             var patient = _mapper.Map<Patient>(incomingDto);
             patient.Id = patientId;
+            patient.AccountId = patientForCheck.AccountId;
+            _repositoryManager.Patients.UpdatePatient(patient);
+            await _repositoryManager.SaveChangesAsync();
+        }
+
+        public async Task UpdatePatientProfileAsync(string accountId, UpdatePatientIncomingDto incomingDto)
+        {
+            var patientForCheck = await _repositoryManager.Patients.GetPatientByAccountIdAsync(accountId, false);
+            if (patientForCheck is null)
+                throw new EntityNotFoundException();
+
+            var patient = _mapper.Map<Patient>(incomingDto);
+            patient.Id = patientForCheck.Id;
+            patient.AccountId = patientForCheck.AccountId;
             _repositoryManager.Patients.UpdatePatient(patient);
             await _repositoryManager.SaveChangesAsync();
         }
