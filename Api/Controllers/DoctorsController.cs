@@ -71,7 +71,7 @@ namespace Api.Controllers
             return Forbid();
         }
 
-        [Authorize(Roles = $"{nameof(UserRole.Patient)},{nameof(UserRole.Receptionist)}")]
+        [Authorize(Roles = $"{nameof(UserRole.Doctor)},{nameof(UserRole.Receptionist)}")]
         [HttpPut("doctor/{doctorId}")]
         public async Task<IActionResult> UpdateDoctorAsync(Guid doctorId, [FromBody] UpdateDoctorIncomingDto incomingDto)
         {
@@ -89,7 +89,7 @@ namespace Api.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = $"{nameof(UserRole.Receptionist)}")]
+        [Authorize(Roles = $"{nameof(UserRole.Doctor)},{nameof(UserRole.Receptionist)}")]
         [HttpPut("doctor/{doctorId}/status")]
         public async Task<IActionResult> ChangeDoctorStatusAsync(Guid doctorId, [FromBody] string statusName)
         {
