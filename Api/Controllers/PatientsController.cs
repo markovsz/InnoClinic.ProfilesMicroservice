@@ -81,6 +81,15 @@ namespace Api.Controllers
             return NoContent();
         }
 
+        [ServiceFilter(typeof(ExtractAccountIdAttribute))]
+        [Authorize(Roles = $"{nameof(UserRole.Patient)}")]
+        [HttpPut("profile")]
+        public async Task<IActionResult> UpdatePatientProfileAsync(string? accountId, [FromBody] UpdatePatientIncomingDto incomingDto)
+        {
+            await _patientsService.UpdatePatientProfileAsync(accountId, incomingDto);
+            return NoContent();
+        }
+
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)}")]
         [HttpDelete("patient/{patientId}")]
         public async Task<IActionResult> DeletePatientAsync(Guid patientId)
