@@ -11,8 +11,6 @@ public class UpdateReceptionistIncomingDtoValidator : AbstractValidator<UpdateRe
         RuleFor(e => e.FirstName).NotNull().NotEmpty();
         RuleFor(e => e.LastName).NotNull().NotEmpty();
         RuleFor(e => e.MiddleName).NotNull().NotEmpty();
-        RuleFor(e => e.PhotoUrl).NotNull().NotEmpty();
         RuleFor(e => e.OfficeId).NotNull().NotEmpty();
-        RuleFor(e => e.AccountId).NotNull().NotEmpty();
     }
 }
