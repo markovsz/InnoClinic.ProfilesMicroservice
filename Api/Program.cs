@@ -17,6 +17,7 @@ builder.Services.AddControllers()
     .AddFluentValidation(options => {
         options.RegisterValidatorsFromAssemblyContaining<Program>();
     });
+builder.Services.AddCors();
 builder.Services.ConfigureSwagger();
 
 var app = builder.Build();
@@ -28,6 +29,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseMiddleware<ExceptionsHandler>();
+
+app.UseCors(e =>
+{
+    e.AllowAnyHeader();
+    e.AllowAnyMethod();
+    e.AllowAnyOrigin();
+});
 
 app.UseHttpsRedirection();
 
