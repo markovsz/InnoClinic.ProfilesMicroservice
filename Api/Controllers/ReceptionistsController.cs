@@ -25,14 +25,13 @@ namespace Api.Controllers
             _updateReceptionistIncomingDtoValidator = updateReceptionistIncomingDtoValidator;
         }
 
-        [ServiceFilter(typeof(ExtractAccountIdAttribute))]
         [Authorize(Roles = nameof(UserRole.Receptionist))]
         [HttpPost]
-        public async Task<IActionResult> CreateReceptionistAsync([FromBody] ReceptionistIncomingDto incomingDto, string? accountId)
+        public async Task<IActionResult> CreateReceptionistAsync([FromBody] ReceptionistIncomingDto incomingDto)
         {
             var result = _receptionistIncomingDtoValidator.Validate(incomingDto);
             result.HandleValidationResult();
-            var receptionistId = await _receptionistsService.CreateReceptionistAsync(incomingDto, accountId);
+            var receptionistId = await _receptionistsService.CreateReceptionistAsync(incomingDto);
             return Created($"receptionist/{receptionistId}", receptionistId);
         }
 

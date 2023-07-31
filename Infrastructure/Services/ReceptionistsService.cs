@@ -19,9 +19,9 @@ namespace Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task<Guid> CreateReceptionistAsync(ReceptionistIncomingDto incomingDto, string accountId)
+        public async Task<Guid> CreateReceptionistAsync(ReceptionistIncomingDto incomingDto)
         {
-            var receptionistForCheck = await _repositoryManager.Receptionists.GetReceptionistByAccountIdAsync(accountId, false);
+            var receptionistForCheck = await _repositoryManager.Receptionists.GetReceptionistByAccountIdAsync(incomingDto.AccountId, false);
             if (receptionistForCheck is not null)
                 throw new EntityAlreadyExistsException();
 
@@ -73,6 +73,7 @@ namespace Infrastructure.Services
 
             var receptionist = _mapper.Map<Receptionist>(incomingDto);
             receptionist.Id = receptionistId;
+            receptionist.AccountId = receptionistForCheck.AccountId;
             _repositoryManager.Receptionists.UpdateReceptionist(receptionist);
             await _repositoryManager.SaveChangesAsync();
         }
