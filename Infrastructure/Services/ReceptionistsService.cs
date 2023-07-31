@@ -43,6 +43,8 @@ namespace Infrastructure.Services
         public async Task<ReceptionistOutgoingDto> GetReceptionistByIdAsync(Guid receptionistId)
         {
             var receptionist = await _repositoryManager.Receptionists.GetReceptionistByIdAsync(receptionistId, false);
+            if (receptionist is null)
+                throw new EntityNotFoundException();
             var outgoingReceptionist = _mapper.Map<ReceptionistOutgoingDto>(receptionist);
             return outgoingReceptionist;
         }
@@ -50,6 +52,8 @@ namespace Infrastructure.Services
         public async Task<ReceptionistOutgoingDto> GetReceptionistProfileAsync(string accountId)
         {
             var receptionist = await _repositoryManager.Receptionists.GetReceptionistByAccountIdAsync(accountId, false);
+            if (receptionist is null)
+                throw new EntityNotFoundException();
             var outgoingReceptionist = _mapper.Map<ReceptionistOutgoingDto>(receptionist);
             return outgoingReceptionist;
         }

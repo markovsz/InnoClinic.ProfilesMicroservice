@@ -44,6 +44,8 @@ namespace Infrastructure.Services
         public async Task<PatientOutgoingDto> GetPatientByIdAsync(Guid patientId)
         {
             var patient = await _repositoryManager.Patients.GetPatientByIdAsync(patientId, false);
+            if (patient is null)
+                throw new EntityNotFoundException();
             var outgoingPatient = _mapper.Map<PatientOutgoingDto>(patient);
             return outgoingPatient;
         }
@@ -51,6 +53,8 @@ namespace Infrastructure.Services
         public async Task<PatientOutgoingDto> GetPatientProfileAsync(string accountId)
         {
             var patient = await _repositoryManager.Patients.GetPatientByAccountIdAsync(accountId, false);
+            if (patient is null)
+                throw new EntityNotFoundException();
             var outgoingPatient = _mapper.Map<PatientOutgoingDto>(patient);
             return outgoingPatient;
         }
