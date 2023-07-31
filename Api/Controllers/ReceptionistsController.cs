@@ -36,10 +36,10 @@ namespace Api.Controllers
         }
 
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)}")]
-        [HttpGet("receptionist/{receptionistId}")]
-        public async Task<IActionResult> GetReceptionistByIdAsync(Guid receptionistId)
+        [HttpGet("receptionist/{id}")]
+        public async Task<IActionResult> GetReceptionistByIdAsync(Guid id)
         {
-            var receptionist = await _receptionistsService.GetReceptionistByIdAsync(receptionistId);
+            var receptionist = await _receptionistsService.GetReceptionistByIdAsync(id);
             return Ok(receptionist);
         }
 
@@ -48,8 +48,8 @@ namespace Api.Controllers
         [HttpGet("profile")]
         public async Task<IActionResult> GetReceptionistProfileAsync(string? accountId)
         {
-            var doctor = await _receptionistsService.GetReceptionistProfileAsync(accountId);
-            return Ok(doctor);
+            var receptionist = await _receptionistsService.GetReceptionistProfileAsync(accountId);
+            return Ok(receptionist);
         }
 
         [Authorize(Roles = $"{nameof(UserRole.Receptionist)}")]
